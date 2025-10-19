@@ -40,7 +40,6 @@ def get_rsi_signal(pair: str = "EUR/USD", interval: str = "5min"):
         response = requests.get(url, params=params, timeout=10)
         data = response.json()
         
-        # ✅ ИСПРАВЛЕНО: Проверяем наличие "values"
         if "values" not in data:
             return {"error": "No 'values' in response", "response": data}
         
@@ -64,6 +63,7 @@ def get_rsi_signal(pair: str = "EUR/USD", interval: str = "5min"):
         }
     except Exception as e:
         return {"error": str(e)}
+
 @app.get("/history")
 def get_history(pair: str = "EUR/USD", interval: str = "5min"):
     if not TWELVE_DATA_API_KEY:
@@ -80,8 +80,11 @@ def get_history(pair: str = "EUR/USD", interval: str = "5min"):
     try:
         response = requests.get(url, params=params, timeout=10)
         data = response.json()
+        
         if "values" not in data:
             return {"error": "No 'values' in response", "response": data}
+        
         return {"values": data["values"]}
+        
     except Exception as e:
         return {"error": str(e)}
